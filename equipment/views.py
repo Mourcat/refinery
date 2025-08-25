@@ -9,5 +9,6 @@ def index(request):
     return render(request, 'equipment/equipment.html', {'categories': categories, 'equipment': equipment})
 
 def equipment_detail(request, slug):
+    categories = Category.objects.all().order_by('title')
     equipment = get_object_or_404(Equipment, slug=slug)
-    return render(request, 'equipment/equipment_detail.html', {'equipment': equipment})
+    return render(request, 'equipment/equipment_detail.html', {'equipment': equipment, 'categories': categories})
