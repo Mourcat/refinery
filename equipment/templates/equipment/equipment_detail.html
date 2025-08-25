@@ -5,8 +5,7 @@
 {% endblock %}
 
 {% block nko_header %}
-    <h1>{{ equipment.position }}</h1>
-    <h5>{{ equipment.category }}</h5>
+    ЛЧ-35-11/600
 {% endblock %}
 
 {% block content %}
@@ -14,7 +13,9 @@
         <br>
         <div class="row">
             <div class="col-9">
-                <h3>{{ equipment.label }}</h3>
+                <h3>{{ equipment.position }}</h3>
+                <h5>{{ equipment.label }}</h5>
+                <p>{{ equipment.category }}</p>
             </div>
             <div class="col">
                 <h5>ИНВЕНТАРНЫЙ НОМЕР<br>{{ equipment.inventory_number }}</h5>
