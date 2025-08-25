@@ -23,13 +23,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'equipment.apps.EquipmentConfig',
+    'storage.apps.StorageConfig',
 ]
 
 UNFOLD = {
     "SITE_TITLE": "Установка ЛЧ-35-11/600",  # Заголовок в браузере
     "SITE_HEADER": "Установка ЛЧ-35-11/600 - оборудование",           # Заголовок в шапке
-    "SITE_ICON": "/static/logo.jpg",         # Путь к логотипу (SVG/PNG)
+   # "SITE_ICON": "/static/logo.jpg",         # Путь к логотипу (SVG/PNG)
     "THEME": "auto",  # "light", "dark" или "auto" (автоопределение)
 }
 
