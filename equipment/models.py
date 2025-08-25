@@ -1,0 +1,61 @@
+from django.db import models
+from django.utils.text import slugify
+
+import random
+import string
+
+
+def rand_slug():
+    """
+    Generates a random slug consisting of lowercase letters and digits.
+    """
+    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(3))
+
+
+class Category(models.Model):
+    title = models.CharField("Название", max_length=50, blank=False, null=False, db_index=True, help_text='категория оборудования')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', help_text='родительская категория')
+    description = models.TextField("Описание", blank=True, null=True, help_text='описание')
+    slug = models.CharField("URL", max_length=50, null=False, unique=True, editable=True, help_text='URL')
+    image = models.ImageField("Изображение", upload_to="equipment_categories/", blank=True, null=True, help_text='изображение категории')
+    
+    class Meta:
+        unique_together = (["slug", "parent"])
+        ordering = ["title"]
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+
+    def __str__(self):
+        full_path = [self.title]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.title)
+            k = k.parent
+        return " > ".join(full_path[::-1])
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(rand_slug() + "-pickBetter" + self.title)
+        super(Category, self).save(*args, **kwargs)
+        
+        
+class Equipment(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="equipment", help_text='категория оборудования')
+    position = models.CharField("Позиция", max_length=25, blank=False, null=False, unique=True, help_text='позиция оборудования')
+    label = models.CharField("Название", max_length=50, blank=False, null=False, db_index=True, help_text='название оборудования')
+    inventory_number = models.CharField("Инвентарный номер", max_length=20, blank=True, null=True, unique=True, help_text='инвентарный номер')
+    slug = models.SlugField("Адресная строка", max_length=50, null=False, unique=True, editable=True, help_text='URL')
+    description = models.TextField("Описание", blank=True, null=True, help_text='описание')
+    image = models.ImageField("Изображение", upload_to="source/equipment/pics/%Y/%m/%d", help_text='изображение')
+
+    class Meta:
+        verbose_name = "Оборудование"
+        verbose_name_plural = "Оборудование"
+        ordering = ['position', 'label']
+        indexes = [
+            models.Index(fields=['inventory_number']),
+            models.Index(fields=['position']),
+        ]
+
+    def __str__(self):
+        return f'{self.position} - {self.label}'
