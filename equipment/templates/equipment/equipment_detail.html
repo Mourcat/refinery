@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ equipment.position }} - {{ equipment.label }}
+{% endblock %}
+
+{% block nko_header %}
+    <h1>{{ equipment.position }}</h1>
+    <h5>{{ equipment.category }}</h5>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-9">
+                <h3>{{ equipment.label }}</h3>
+            </div>
+            <div class="col">
+                <h5>ИНВЕНТАРНЫЙ НОМЕР<br>{{ equipment.inventory_number }}</h5>
+            </div>
+        </div>
+        <br>
+        <img src="{{ equipment.image.url }}" class="img-fluid rounded mx-auto d-block" alt="{{ equipment.label }}">
+        <br><br>
+        <p>{{ equipment.description }}  </p>
+    </div>
+{% endblock  %}

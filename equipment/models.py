@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.urls import reverse
 
 import random
 import string
@@ -59,3 +60,7 @@ class Equipment(models.Model):
 
     def __str__(self):
         return f'{self.position} - {self.label}'
+    
+    def get_absolute_url(self):
+        return reverse("equipment:equipment-detail", args=str(self.slug))
+    

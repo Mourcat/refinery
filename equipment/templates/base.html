@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <title>{% block title %} {% endblock %}</title>
     <style>
         :root {
@@ -235,6 +236,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -247,171 +249,18 @@
             </div>
         </div>
     </header>
-    
-    <main class="container">
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Поиск по названию, позиции или инвентарному номеру...">
-            <button id="search-button">Найти</button>
-        </div>
         
-        <div class="filters">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label for="category-filter">Категория</label>
-                    <select id="category-filter">
-                        <option value="">Все категории</option>
-                        {% for cat in categories %}
-                            {% if not cat.parent %}
-                                <option value="{{ cat.slug }}">{{ cat.title }}</option>
-                            {% else %}
-                                <option value="{{ cat.slug }}">{{ cat.parent }} > {{ cat.title }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="sort-by">Сортировать по</label>
-                    <select id="sort-by">
-                        <option value="position">Позиция</option>
-                        <option value="label">Название</option>
-                        <option value="inventory_number">Инвентарный номер</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="equipment-grid" id="equipment-container">
-            <!-- Equipment cards will be generated here -->
-        </div>
-        
-        <div class="pagination" id="pagination">
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
-        </div>
-    </main>
+    {% block content %}
+    {% endblock %}
     
     <footer>
         <div class="container">
-            <p>© 2025. ООО ПО Киришинефтеоргсинтез. Все права защищены.</p>
+            <p>© 2025. ООО ПО КИРИШИНЕФТЕОРГСИНТЕЗ. Все права защищены.</p>
         </div>
     </footer>
 
-    <script>
-        const equipmentData = []
-
-        {% for item in equipment %}
-        equipmentData.push({
-            'id': {{ item.id }},
-            'category': "{{ item.category }}",
-            'position': "{{ item.position }}",
-            'label': "{{ item.label }}",
-            'inventory_number': "{{ item.inventory_number }}",
-            'slug': "{{ item.slug }}",
-            'description': "{{ item.description }}",
-            'image': "{{ item.image.url }}",
-        });
-        {% endfor %}
-        
-
-        // Function to render equipment cards
-        function renderEquipment(equipment) {
-            const container = document.getElementById('equipment-container');
-            container.innerHTML = '';
-            
-            equipment.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'equipment-card';
-                
-                card.innerHTML = `
-                    <div class="card-image">
-                        <img src="${item.image}" alt="${item.label}">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-position">${item.position}</div>
-                        <h3 class="card-label">${item.label}</h3>
-                        
-                        <div class="card-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Категория:</span>
-                                <span>${item.category}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Инв. номер:</span>
-                                <span>${item.inventory_number}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="card-description">
-                            <p>${item.description}</p>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            renderEquipment(equipmentData);
-            
-            // Add event listeners for filtering and searching
-            document.getElementById('search-button').addEventListener('click', performSearch);
-            document.getElementById('search-input').addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    performSearch();
-                }
-            });
-            
-            document.getElementById('category-filter').addEventListener('change', filterEquipment);
-            document.getElementById('sort-by').addEventListener('change', sortEquipment);
-        });
-
-        // Search function
-        function performSearch() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            
-            const filteredEquipment = equipmentData.filter(item => {
-                return (
-                    item.label.toLowerCase().includes(searchTerm) ||
-                    item.position.toLowerCase().includes(searchTerm) ||
-                    item.inventory_number.toLowerCase().includes(searchTerm)
-                );
-            });
-            
-            renderEquipment(filteredEquipment);
-        }
-
-        // Filter function
-        function filterEquipment() {
-            const categoryFilter = document.getElementById('category-filter').value;
-            
-            if (!categoryFilter) {
-                renderEquipment(equipmentData);
-                return;
-            }
-            
-            const filteredEquipment = equipmentData.filter(item => {
-                return item.category === categoryFilter;
-            });
-            
-            renderEquipment(filteredEquipment);
-        }
-
-        // Sort function
-        function sortEquipment() {
-            const sortBy = document.getElementById('sort-by').value;
-            
-            const sortedEquipment = [...equipmentData];
-            
-            sortedEquipment.sort((a, b) => {
-                if (a[sortBy] < b[sortBy]) return -1;
-                if (a[sortBy] > b[sortBy]) return 1;
-                return 0;
-            });
-            
-            renderEquipment(sortedEquipment);
-        }
-    </script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
+
 </html>
