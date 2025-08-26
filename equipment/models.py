@@ -5,6 +5,8 @@ from django.urls import reverse
 import random
 import string
 
+from storage.models import Bearing
+
 
 def rand_slug():
     """
@@ -19,7 +21,7 @@ class Category(models.Model):
     description = models.TextField("Описание", blank=True, null=True, help_text='описание')
     slug = models.CharField("URL", max_length=50, null=False, unique=True, editable=True, help_text='URL')
     image = models.ImageField("Изображение", upload_to="equipment_categories/", blank=True, null=True, help_text='изображение категории')
-    
+        
     class Meta:
         unique_together = (["slug", "parent"])
         ordering = ["title"]
@@ -48,6 +50,7 @@ class Equipment(models.Model):
     slug = models.SlugField("Адресная строка", max_length=50, null=False, unique=True, editable=True, help_text='URL')
     description = models.TextField("Описание", blank=True, null=True, help_text='описание')
     image = models.ImageField("Изображение", upload_to="source/equipment/pics/%Y/%m/%d", help_text='изображение')
+    bearings = models.ManyToManyField(Bearing, blank=True, null=True, help_text='подшипники')
 
     class Meta:
         verbose_name = "Оборудование"
