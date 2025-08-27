@@ -5,7 +5,7 @@ from django.urls import reverse
 import random
 import string
 
-from storage.models import Bearing
+from storage.models import Bearing, MechSeal
 
 
 def rand_slug():
@@ -20,7 +20,7 @@ class Category(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', help_text='родительская категория')
     description = models.TextField("Описание", blank=True, null=True, help_text='описание')
     slug = models.CharField("URL", max_length=50, null=False, unique=True, editable=True, help_text='URL')
-    image = models.ImageField("Изображение", upload_to="equipment_categories/", blank=True, null=True, help_text='изображение категории')
+    image = models.ImageField("Изображение", upload_to="categories/", blank=True, null=True, help_text='изображение категории')
         
     class Meta:
         unique_together = (["slug", "parent"])
@@ -45,11 +45,13 @@ class Category(models.Model):
 class Equipment(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="equipment", help_text='категория оборудования')
     position = models.CharField("Позиция", max_length=25, blank=False, null=False, unique=True, help_text='позиция оборудования')
+    manufacturer = models.CharField("Производитель", max_length=50, blank=True, null=True, help_text='производитель оборудования')
     label = models.CharField("Название", max_length=50, blank=False, null=False, db_index=True, help_text='название оборудования')
     inventory_number = models.CharField("Инвентарный номер", max_length=20, blank=True, null=True, unique=True, help_text='инвентарный номер')
     slug = models.SlugField("Адресная строка", max_length=50, null=False, unique=True, editable=True, help_text='URL')
     description = models.TextField("Описание", blank=True, null=True, help_text='описание')
-    image = models.ImageField("Изображение", upload_to="source/equipment/pics/%Y/%m/%d", help_text='изображение')
+    image = models.ImageField("Изображение", upload_to="equipment/", help_text='изображение')
+    mech_seal = models.ForeignKey(MechSeal, on_delete=models.DO_NOTHING, related_name='mech_seal', blank=True, null=True, help_text='торцевое уплотнение')
     bearings = models.ManyToManyField(Bearing, blank=True, null=True, help_text='подшипники')
 
     class Meta:

@@ -21,13 +21,13 @@ class BearingAdmin(ModelAdmin):
 
 @admin.register(MechSeal)
 class MechSealAdmin(ModelAdmin):
-    list_display = ("manufacturer", "assembly_code")
-    list_filter = ("manufacturer",)
-    search_fields = ("manufacturer", "assembly_code")
-    ordering = ["manufacturer", "assembly_code"]
+    list_display = ("manufacturer", "label","assembly_code")
+    list_filter = ("manufacturer", "label")
+    search_fields = ("manufacturer", "label", "assembly_code")
+    ordering = ["manufacturer", "label", "assembly_code"]
     
     def get_prepopulated_fields(self, request, obj = None):
         """
         Retrieves the prepopulated fields for the given request and object.
         """
-        return {"slug": ("manufacturer", "assembly_code",)}
+        return {"slug": ("manufacturer", "label", "assembly_code",)}
