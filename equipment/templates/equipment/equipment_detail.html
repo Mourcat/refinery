@@ -16,34 +16,46 @@
             
             <div class="col-9">
                 <h3>{{ equipment.position }}</h3>
-                <h5>{{ equipment.label }}</h5>
-                <p>{{ equipment.category }}</p>
+                <h5>{{ equipment.manufacturer }}</h5>
+                <h6>{{ equipment.label }}</h6>
+                <h6>{{ equipment.category }}</h6>
             </div>
             
             <div class="col">
-                <p>ИНВЕНТАРНЫЙ НОМЕР</p><h3>{{ equipment.inventory_number }}</h3>
+                <br><br>
+                <h6 class="text-end">инвентарный номер</h6>
+                <h5 class="text-end">{{ equipment.inventory_number }}</h5>
             </div>
+
         </div>
+
         <br>
         <img src="{{ equipment.image.url }}" class="img-fluid rounded mx-auto d-block" alt="{{ equipment.label }}">
         <br><br>
     </div>
     
     <div class="container">
+
         <div class="row">
+
             <div class="col">
                 <h5>Подшипники.</h5>
                 {% for bear in equipment.bearings.all %}
+                <div class="row">
                     <div class="col-2 text-center">
                         <img src="{{ bear.image.url }}" class="rounded mx-auto d-block img-thumbnail" alt="{{ bear }}">
                     </div>
                     <div class="col text-center">
                         <span>{{ bear }}</span>
                     </div>
+                </div>
                 {% endfor %}
             </div>
+
             <div class="col">
                 <h5 class="text-end">Торцевое уплотнение.</h5>
+                <h3 class="text-end">{{ equipment.mech_seal }}</h3>
+                <img src="{{ equipment.mech_seal.image.url }}" class="rounded mx-auto d-block img-thumbnail" alt="{{ equipment.mech_seal }}">
             </div>
         </div>
     </div>

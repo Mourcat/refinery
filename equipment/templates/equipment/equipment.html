@@ -69,6 +69,7 @@
             'slug': "{{ item.slug }}",
             'description': "{{ item.description }}",
             'image': "{{ item.image.url }}",
+            'manufacturer': "{{ item.manufacturer }}",
         });
     {% endfor %}
         
@@ -86,17 +87,27 @@
                     <a href="equipment/${item.slug}/"><img src="${item.image}" alt="${item.label}"></a>
                 </div>
                 <div class="card-content">
-                    <div class="card-position">${item.position}</div>
-                    <h3 class="card-label">${item.label}</h3>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="card-label">
+                                <h3>${item.manufacturer}</h3>
+                                <h5>${item.label}</h5>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card-position text-end">${item.position}</div>
+                        </div>
+                    </div>
+                
                         
                     <div class="card-details">
                         <div class="detail-item">
-                            <span class="detail-label">Категория:</span>
-                            <span>${item.category}</span>
+                            <span class="detail-label small">Категория:</span>
+                            <span class="small">${item.category}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Инв. номер:</span>
-                            <span>${item.inventory_number}</span>
+                            <span class="detail-label small">Инвeнтарный номер:</span>
+                            <span class="small">${item.inventory_number}</span>
                         </div>
                     </div>
                         
