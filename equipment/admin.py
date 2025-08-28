@@ -19,7 +19,7 @@ class CategoryAdmin(ModelAdmin):
     
 @admin.register(Equipment)
 class EquipmentAdmin(ModelAdmin):
-    list_display = ("position", "label", "inventory_number")
+    list_display = ("position", "manufacturer", "label", "inventory_number")
     list_filter = ("category",)
     search_fields = ("position", "label", "inventory_number")
     ordering = ("position", "label")
