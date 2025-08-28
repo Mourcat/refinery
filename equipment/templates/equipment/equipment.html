@@ -10,12 +10,10 @@
 
 {% block content %}
  <main class="container">
-
     <div class="search-bar">
         <input type="text" id="search-input" placeholder="Поиск по названию, позиции или инвентарному номеру...">
         <button id="search-button">Найти</button>
     </div>
-        
     <div class="filters">
         <div class="filter-row">
             <div class="filter-group">
@@ -24,9 +22,9 @@
                     <option value="">Все категории</option>
                     {% for cat in categories %}
                         {% if not cat.parent %}
-                            <option value="{{ cat.slug }}">{{ cat.title }}</option>
+                            <option value={{ cat.pk }}>{{ cat.title }}</option>
                         {% else %}
-                            <option value="{{ cat.slug }}">{{ cat.parent }} > {{ cat.title }}</option>
+                            <option value={{ cat.pk }}>{{ cat }}</option>
                         {% endif %}
                     {% endfor %}
                 </select>
@@ -55,14 +53,12 @@
     </main>
 
 
-
  <script>
     const equipmentData = []
-
     {% for item in equipment %}
         equipmentData.push({
             'id': {{ item.id }},
-            'category': "{{ item.category }}",
+            'category': "{{ item.category_id }}",
             'position': "{{ item.position }}",
             'label': "{{ item.label }}",
             'inventory_number': "{{ item.inventory_number }}",
@@ -73,7 +69,6 @@
         });
     {% endfor %}
         
-
     // Function to render equipment cards
     function renderEquipment(equipment) {
         const container = document.getElementById('equipment-container');
@@ -153,19 +148,20 @@
     // Filter function
     function filterEquipment() {
         const categoryFilter = document.getElementById('category-filter').value;
+        console.log(categoryFilter)
             
         if (!categoryFilter) {
             renderEquipment(equipmentData);
             return;
         }
-            
+        
         const filteredEquipment = equipmentData.filter(item => {
             return item.category === categoryFilter;
         });
-            
+        console.log(filteredEquipment) 
         renderEquipment(filteredEquipment);
     }
-
+    
         // Sort function
     function sortEquipment() {
         const sortBy = document.getElementById('sort-by').value;

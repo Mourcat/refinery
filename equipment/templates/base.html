@@ -266,9 +266,8 @@
                                         {% if not cat.parent %}
                                             <li><a class="dropdown-item" href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
                                         {% else %}
-                                            <li><a class="dropdown-item" href="{{ cat.get_absolute_url }}">     {{ cat.title }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ cat.get_absolute_url }}">{{ cat }}</a></li>
                                         {% endif %}
-                                        
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -298,11 +297,8 @@
     {% endblock %}
     
     <div class="container text-center">    
-        
             <p>© 2025. ООО ПО КИРИШИНЕФТЕОРГСИНТЕЗ. Все права защищены.</p>
-        
     </div>
-
    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>

@@ -9,9 +9,165 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        {% for equip in equipment %}
-            <h5>{{ equip }}</h5>
-        {% endfor %}
+     <main class="container">
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Поиск по названию, позиции или инвентарному номеру...">
+        <button id="search-button">Найти</button>
     </div>
+    <div class="filters">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="category-filter">Категория</label>
+                <select id="category-filter">
+                    <option value="">Все категории</option>
+                    {% for cat in categories %}
+                        {% if not cat.parent %}
+                            <option value="{{ cat.get_absolute_url }}">{{ cat.title }}</option>
+                        {% else %}
+                            <option value="{{ cat.get_absolute_url }}">{{ cat }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+                
+            <div class="filter-group">
+                <label for="sort-by">Сортировать по</label>
+                <select id="sort-by">
+                    <option value="position">Позиция</option>
+                    <option value="label">Название</option>
+                    <option value="inventory_number">Инвентарный номер</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="equipment-grid" id="equipment-container">
+        <!-- Equipment cards will be generated here -->
+    </div>
+
+    <div class="pagination" id="pagination">
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+        </div>
+    </main>
+
+
+ <script>
+    const equipmentData = []
+
+    {% for item in equipment %}
+        equipmentData.push({
+            'id': {{ item.id }},
+            'category': "{{ item.category }}",
+            'position': "{{ item.position }}",
+            'label': "{{ item.label }}",
+            'inventory_number': "{{ item.inventory_number }}",
+            'slug': "{{ item.slug }}",
+            'description': "{{ item.description }}",
+            'image': "{{ item.image.url }}",
+            'manufacturer': "{{ item.manufacturer }}",
+        });
+    {% endfor %}
+        
+
+    // Function to render equipment cards
+    function renderEquipment(equipment) {
+        const container = document.getElementById('equipment-container');
+        container.innerHTML = '';
+            
+        equipment.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'equipment-card';
+            card.innerHTML = `
+                <div class="card-image">
+                    <a href="equipment/${item.slug}/"><img src="${item.image}" alt="${item.label}"></a>
+                </div>
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="card-label">
+                                <h3>${item.manufacturer}</h3>
+                                <h5>${item.label}</h5>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card-position text-end">${item.position}</div>
+                        </div>
+                    </div>
+                
+                        
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="detail-label small">Категория:</span>
+                            <span class="small">${item.category}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label small">Инвeнтарный номер:</span>
+                            <span class="small">${item.inventory_number}</span>
+                        </div>
+                    </div>
+                        
+                    <div class="card-description">
+                        <p>${item.description}</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderEquipment(equipmentData);
+            
+        // Add event listeners for filtering and searching
+        document.getElementById('search-button').addEventListener('click', performSearch);
+        document.getElementById('search-input').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+            
+        document.getElementById('category-filter').addEventListener('change', filterEquipment);
+        document.getElementById('sort-by').addEventListener('change', sortEquipment);
+    });
+
+    // Search function
+    function performSearch() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const filteredEquipment = equipmentData.filter(item => {
+            return (
+                item.label.toLowerCase().includes(searchTerm) ||
+                item.position.toLowerCase().includes(searchTerm) ||
+                item.inventory_number.toLowerCase().includes(searchTerm)
+            );
+        });
+        renderEquipment(filteredEquipment);
+    }
+
+    // Filter function
+    function filterEquipment() {
+        const categoryFilter = document.getElementById('category-filter').value;
+        if (!categoryFilter) {
+            renderEquipment(equipmentData);
+            return;
+        }
+        const filteredEquipment = equipmentData.filter(item => {
+            return item.category_id === categoryFilter;
+        });
+        renderEquipment(filteredEquipment);
+    }
+
+        // Sort function
+    function sortEquipment() {
+        const sortBy = document.getElementById('sort-by').value;
+        const sortedEquipment = [...equipmentData];
+        sortedEquipment.sort((a, b) => {
+            if (a[sortBy] < b[sortBy]) return -1;
+            if (a[sortBy] > b[sortBy]) return 1;
+            return 0;
+        });
+        renderEquipment(sortedEquipment);
+    }
+</script>
 {% endblock  %}
