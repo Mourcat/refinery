@@ -1,12 +1,21 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
 
 from .models import Category, Equipment
 
 
 def index(request):
     categories = Category.objects.all().order_by('parent', 'title')
-    equipment = Equipment.objects.all()
-    return render(request, 'equipment/equipment.html', {'categories': categories, 'equipment': equipment})
+    equipment_list = Equipment.objects.all().order_by('position')
+    
+    paginator = Paginator(equipment_list, 12)  # Show 12 equipment per page
+    page_number = request.GET.get('page')
+    equipment = paginator.get_page(page_number)
+    
+    return render(request, 'equipment/equipment.html', {
+        'categories': categories, 
+        'equipment': equipment
+    })
 
 def equipment_detail(request, slug):
     categories = Category.objects.all().order_by('parent', 'title')
@@ -16,5 +25,14 @@ def equipment_detail(request, slug):
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     categories = Category.objects.all().order_by('parent', 'title')
-    equipment = Equipment.objects.all().filter(category=category_id).order_by('position')
-    return render(request, 'equipment/category_detail.html', {'categories': categories, 'category': category, 'equipment': equipment})
+    equipment_list = Equipment.objects.filter(category=category_id).order_by('position')
+    
+    paginator = Paginator(equipment_list, 12)  # Show 12 equipment per page
+    page_number = request.GET.get('page')
+    equipment = paginator.get_page(page_number)
+    
+    return render(request, 'equipment/category_detail.html', {
+        'categories': categories, 
+        'category': category, 
+        'equipment': equipment
+    })

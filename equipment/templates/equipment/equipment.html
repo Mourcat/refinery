@@ -45,11 +45,27 @@
         <!-- Equipment cards will be generated here -->
     </div>
 
+    {% if equipment.has_other_pages %}
     <div class="pagination" id="pagination">
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
-        </div>
+        {% if equipment.has_previous %}
+            <a href="?page=1" class="pagination-btn">««</a>
+            <a href="?page={{ equipment.previous_page_number }}" class="pagination-btn">‹</a>
+        {% endif %}
+        
+        {% for num in equipment.paginator.page_range %}
+            {% if equipment.number == num %}
+                <button class="pagination-btn active">{{ num }}</button>
+            {% elif num > equipment.number|add:'-3' and num < equipment.number|add:'3' %}
+                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if equipment.has_next %}
+            <a href="?page={{ equipment.next_page_number }}" class="pagination-btn">›</a>
+            <a href="?page={{ equipment.paginator.num_pages }}" class="pagination-btn">»»</a>
+        {% endif %}
+    </div>
+    {% endif %}
     </main>
 
 
