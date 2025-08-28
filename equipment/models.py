@@ -41,9 +41,13 @@ class Category(models.Model):
             self.slug = slugify(rand_slug() + "-pickBetter" + self.title)
         super(Category, self).save(*args, **kwargs)
         
+    def get_absolute_url(self):
+        return reverse("equipment:category-detail", args=str(self.pk))
+    
+        
         
 class Equipment(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="equipment", help_text='категория оборудования')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="category", help_text='категория оборудования')
     position = models.CharField("Позиция", max_length=25, blank=False, null=False, unique=True, help_text='позиция оборудования')
     manufacturer = models.CharField("Производитель", max_length=50, blank=True, null=True, help_text='производитель оборудования')
     label = models.CharField("Название", max_length=50, blank=False, null=False, db_index=True, help_text='название оборудования')

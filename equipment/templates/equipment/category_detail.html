@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ category.title }}
+{% endblock %}
+
+{% block nko_header %}
+    ЛЧ-35-11/600
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% for equip in equipment %}
+            <h5>{{ equip }}</h5>
+        {% endfor %}
+    </div>
+{% endblock  %}
