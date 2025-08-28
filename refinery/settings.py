@@ -4,7 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8bluv*zwomp1=%dqmf!@u96c3m^1igpwqjx#6j-sfpr!08n$k4'
 DEBUG = True
-ALLOWED_HOSTS = ['4d8ed121-74c2-4d16-a33b-699d7d7dd1bd-00-39jhwkoyv3r52.picard.replit.dev']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "unfold",  # before django.contrib.admin

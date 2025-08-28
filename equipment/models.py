@@ -56,7 +56,7 @@ class Equipment(models.Model):
     description = models.TextField("Описание", blank=True, null=True, help_text='описание')
     image = models.ImageField("Изображение", upload_to="equipment/", help_text='изображение')
     mech_seal = models.ForeignKey(MechSeal, on_delete=models.DO_NOTHING, related_name='mech_seal', blank=True, null=True, help_text='торцевое уплотнение')
-    bearings = models.ManyToManyField(Bearing, blank=True, null=True, help_text='подшипники')
+    bearings = models.ManyToManyField(Bearing, blank=True, help_text='подшипники')
 
     class Meta:
         verbose_name = "Оборудование"
