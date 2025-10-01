@@ -17,6 +17,7 @@ class LoginRequiredMiddleware:
         self.exempt_url_patterns = [
             r"^/admin/",
             r"^/accounts/",
+            r"^/api/",
             rf"^{re.escape(static_url)}",
             rf"^{re.escape(media_url)}",
         ]

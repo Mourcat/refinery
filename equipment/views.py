@@ -3,6 +3,10 @@ from django.core.paginator import Paginator
 
 from .models import Category, Equipment
 
+# DRF viewsets
+from rest_framework import viewsets, permissions
+from .serializers import CategorySerializer, EquipmentSerializer
+
 
 def index(request):
     categories = Category.objects.all().order_by('parent', 'title')
@@ -36,3 +40,15 @@ def category_detail(request, category_id):
         'category': category, 
         'equipment': equipment
     })
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all().order_by('title')
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+
+
+class EquipmentViewSet(viewsets.ModelViewSet):
+    queryset = Equipment.objects.all().order_by('position')
+    serializer_class = EquipmentSerializer
+    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]

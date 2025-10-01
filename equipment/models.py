@@ -6,6 +6,7 @@ import random
 import string
 
 from storage.models import Bearing, MechSeal
+from django.conf import settings
 
 
 def rand_slug():
