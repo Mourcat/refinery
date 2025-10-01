@@ -31,3 +31,6 @@ args = "python manage.py migrate"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python manage.py runserver 0.0.0.0:5000"
+
+[agent]
+expertMode = true
